@@ -67,10 +67,10 @@ function App() {
         className="relative flex flex-col gap-4 items-center justify-center px-4 min-h-screen text-center"
       >
         <div className="text-3xl md:text-5xl font-bold text-neutral-700 dark:text-white max-w-4xl leading-relaxed lg:leading-snug">
-          <TextGenerateEffect words={"Welcome to Insurance Helper"} />
+          <TextGenerateEffect words={"Welcome to Medico AI"} />
         </div>
         <div className="font-extralight text-base md:text-lg text-neutral-600 dark:text-neutral-300 max-w-xl py-4">
-          <TextGenerateEffect words={"Get personalized insurance recommendations easily. Sign in to discover the best plans tailored for you."} delay={0.2} />
+          <TextGenerateEffect words={"Easily upload your policy and discover smarter, more affordable coverage."} delay={0.2} />
         </div>
         
         <motion.button
