@@ -6,6 +6,7 @@ const { auth } = require('./middlewares/auth');
 const app = express();
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
+const cors = require('cors');
 const { connectQueue, summaryWorker, websearchWorker } = require('./config/queue');
 const { WebSocketServer, WebSocket } = require('ws');
 const { startPubSub } = require('./config/pubsub');
@@ -17,6 +18,10 @@ app.use(fileUpload({
     useTempFiles : true,
     tempFileDir : '/tmp/'
 }));
+app.use(cors({
+    origin: 'http://localhost:5173', 
+    credentials: true,
+}))
 
 
 

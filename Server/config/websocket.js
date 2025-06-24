@@ -36,7 +36,7 @@ function setupWebSocket(wss){
             console.log('Client disconnected');
         })
 
-        ws.send('Welcome to the WebSocket server!');
+        // ws.send('Welcome to the WebSocket server!');
     })
 
 
