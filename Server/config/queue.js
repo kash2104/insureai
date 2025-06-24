@@ -1,6 +1,7 @@
 const amqplib = require('amqplib');
 const { extractInsuranceFields } = require('../utils/llmproxy');
 const { webSearch } = require('../utils/websearch');
+const { publisher, CHANNEL } = require('./pubsub');
 
 
 let connection, channel;
@@ -91,7 +92,12 @@ async function websearchWorker(){
                     channel.ack(data);
                     return;
                 }
-                console.log(`Web search results for ID ${id}:`, webSearchResults);
+                
+                await publisher.publish(CHANNEL, JSON.stringify({
+                    task_id: id,
+                    result: webSearchResults,
+                }));
+                // console.log(`Web search results for ID ${id}:`, webSearchResults);
 
                 // Acknowledge the message
                 channel.ack(data);

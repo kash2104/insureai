@@ -7,6 +7,9 @@ const app = express();
 const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
 const { connectQueue, summaryWorker, websearchWorker } = require('./config/queue');
+const { WebSocketServer, WebSocket } = require('ws');
+const { startPubSub } = require('./config/pubsub');
+const { setupWebSocket } = require('./config/websocket');
 
 app.use(express.json());
 app.use(cookieParser());
@@ -32,6 +35,7 @@ async function startQueueAndWorkers(){
 }
 
 startQueueAndWorkers();
+startPubSub();
 
 
 app.get('/', (req, res) => {
@@ -42,7 +46,26 @@ app.get('/', (req, res) => {
 })
 
 
-app.listen(4000, () => {
+const httpServer = app.listen(4000, () => {
     
     console.log("App is listening on port 4000.")
 })
+
+
+const wss = new WebSocketServer({ server: httpServer });
+
+setupWebSocket(wss);
+
+// wss.on('connection', function connection(ws) {
+//   ws.on('error', console.error);
+
+//   ws.on('message', function message(data, isBinary) {
+//     wss.clients.forEach(function each(client) {
+//       if (client.readyState === WebSocket.OPEN) {
+//         client.send(data, { binary: isBinary });
+//       }
+//     });
+//   });
+
+//   ws.send('Hello! Message From Server!!');
+// });
