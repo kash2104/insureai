@@ -1,0 +1,23 @@
+
+/* Add to your global CSS file (e.g., App.css or index.css) */
+@keyframes aurora {
+  from {
+    background-position: 50% 50%, 50% 50%;
+  }
+  to {
+    background-position: 350% 50%, 350% 50%;
+  }
+}
+
+/* Define CSS variables used by AuroraBackground (Tailwind typically handles these, but explicitly defining them can be a fallback) */
+/* You might need to adjust these based on your Tailwind config or if you're not using Tailwind for these specific colors */
+:root {
+  --white: #ffffff;
+  --black: #000000;
+  --transparent: transparent;
+  --blue-500: #3b82f6; /* Example color, adjust if needed */
+  --indigo-300: #a5b4fc; /* Example color, adjust if needed */
+  --blue-300: #93c5fd;   /* Example color, adjust if needed */
+  --violet-200: #ddd6fe; /* Example color, adjust if needed */
+  --blue-400: #60a5fa;   /* Example color, adjust if needed */
+}
