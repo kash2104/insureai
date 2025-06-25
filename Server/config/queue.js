@@ -3,11 +3,11 @@ const { extractInsuranceFields } = require('../utils/llmproxy');
 const { webSearch } = require('../utils/websearch');
 const { publisher, CHANNEL } = require('./pubsub');
 
-
 let connection, channel;
 async function connectQueue(){
     try {
-        connection = await amqplib.connect("amqp://localhost");
+        const rabbitmqurl = process.env.RABBITMQ_URL || "amqp://localhost";
+        connection = await amqplib.connect(rabbitmqurl);
 
         channel = await connection.createChannel();
 

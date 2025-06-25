@@ -1,6 +1,7 @@
 const { createClient } = require("redis");
 
-const publisher = createClient();
+const redisurl = process.env.REDIS_URL || "redis://localhost:6379";
+const publisher = createClient({url: redisurl});
 const subscriber = publisher.duplicate();
 const CHANNEL = 'similar_insurance';
 
