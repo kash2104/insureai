@@ -12,7 +12,7 @@ function App() {
     onSuccess: async tokenResponse => {
       try {
         // console.log('Access Token:', tokenResponse.access_token);
-        const accessToken = tokenResponse.access_token;
+        // const accessToken = tokenResponse.access_token;
           const response = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
             method: 'GET',
             headers: {
@@ -21,11 +21,11 @@ function App() {
           });
 
           const userInfo = await response.json();
-          console.log('User Info:', userInfo);
+          // console.log('User Info:', userInfo);
           localStorage.setItem('task_id', userInfo.id); 
 
 
-          const result = await fetch('http://localhost:4000/api/v1/login', {
+          const result = await fetch(`${import.meta.env.VITE_BASE_URL}/login`, {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json',

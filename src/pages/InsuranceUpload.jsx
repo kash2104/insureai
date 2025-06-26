@@ -266,7 +266,7 @@ function InsuranceUploadPage() {
     if (!taskId && !isProcessing) return;
     if (result && !isProcessing) return;
 
-    const ws = new WebSocket('ws://localhost:4000');
+    const ws = new WebSocket(`ws://${import.meta.env.VITE_IP_ADDRESS}:4000`);
 
     ws.onopen = () => {
       if (taskId) {
@@ -345,7 +345,7 @@ function InsuranceUploadPage() {
       const formData = new FormData();
       formData.append('file', selectedFile);
       try {
-        const response = await fetch(`http://localhost:4000/api/v1/extract`, {
+        const response = await fetch(`${import.meta.env.VITE_BASE_URL}/extract`, {
           method: 'POST',
           credentials: 'include',
           body: formData,
