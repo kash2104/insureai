@@ -12,7 +12,7 @@ function App() {
     onSuccess: async tokenResponse => {
       try {
         // console.log('Access Token:', tokenResponse.access_token);
-        // const accessToken = tokenResponse.access_token;
+        const accessToken = tokenResponse.access_token;
           const response = await fetch('https://www.googleapis.com/oauth2/v2/userinfo', {
             method: 'GET',
             headers: {
