@@ -1,7 +1,7 @@
 const amqplib = require("amqplib");
 const { extractInsuranceFields } = require("../utils/llmproxy");
-const { webSearch } = require("../utils/websearch");
-const { publisher, CHANNEL } = require("./pubsub");
+// const { webSearch } = require("../utils/websearch");
+// const { publisher, CHANNEL } = require("./pubsub");
 
 let connection, channel;
 async function connectQueue() {
@@ -13,9 +13,10 @@ async function connectQueue() {
 
     await channel.assertQueue("summariseQueue");
 
-    await channel.assertQueue("websearchQueue");
+    // await channel.assertQueue("websearchQueue");
 
     console.log("Connected to RabbitMQ and queue is ready");
+    return channel;
   } catch (error) {
     console.error("Error connecting to RabbitMQ:", error);
     throw new Error("Failed to connect to RabbitMQ");
@@ -78,48 +79,48 @@ async function summaryWorker() {
   }
 }
 
-async function websearchWorker() {
-  try {
-    console.log(`websearch worker started`);
-    await channel.consume("websearchQueue", async (data) => {
-      if (data !== null) {
-        const { id, summary, accessToken } = JSON.parse(
-          data.content.toString()
-        );
-        // console.log('Received data for web search:', {id, summary, accessToken});
+// async function websearchWorker() {
+//   try {
+//     console.log(`websearch worker started`);
+//     await channel.consume("websearchQueue", async (data) => {
+//       if (data !== null) {
+//         const { id, summary, accessToken } = JSON.parse(
+//           data.content.toString()
+//         );
+//         // console.log('Received data for web search:', {id, summary, accessToken});
 
-        const webSearchResults = await webSearch(summary, accessToken);
+//         const webSearchResults = await webSearch(summary, accessToken);
 
-        if (!webSearchResults) {
-          console.error("No web search results found for ID:", id);
-          channel.ack(data);
-          return;
-        }
+//         if (!webSearchResults) {
+//           console.error("No web search results found for ID:", id);
+//           channel.ack(data);
+//           return;
+//         }
 
-        await publisher.publish(
-          CHANNEL,
-          JSON.stringify({
-            task_id: id,
-            result: webSearchResults,
-          })
-        );
-        console.log("Data published from websearch worker");
-        // console.log(`Web search results for ID ${id}:`, webSearchResults);
+//         await publisher.publish(
+//           CHANNEL,
+//           JSON.stringify({
+//             task_id: id,
+//             result: webSearchResults,
+//           })
+//         );
+//         console.log("Data published from websearch worker");
+//         // console.log(`Web search results for ID ${id}:`, webSearchResults);
 
-        // Acknowledge the message
-        channel.ack(data);
-      }
-    });
-  } catch (error) {
-    console.error("Error in web search worker:", error);
-    channel.ack(data);
-  }
-}
+//         // Acknowledge the message
+//         channel.ack(data);
+//       }
+//     });
+//   } catch (error) {
+//     console.error("Error in web search worker:", error);
+//     channel.ack(data);
+//   }
+// }
 
 module.exports = {
   connectQueue,
   sendDataToSummaryQueue,
   sendDataToWebSearchQueue,
   summaryWorker,
-  websearchWorker,
+  // websearchWorker,
 };
