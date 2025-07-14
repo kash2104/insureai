@@ -1,5 +1,5 @@
 const amqplib = require("amqplib");
-const { extractInsuranceFields } = require("../utils/llmproxy");
+// const { extractInsuranceFields } = require("../utils/llmproxy");
 // const { webSearch } = require("../utils/websearch");
 // const { publisher, CHANNEL } = require("./pubsub");
 
@@ -11,11 +11,11 @@ async function connectQueue() {
 
     channel = await connection.createChannel();
 
-    await channel.assertQueue("summariseQueue");
+    // await channel.assertQueue("summariseQueue");
 
     // await channel.assertQueue("websearchQueue");
 
-    console.log("Connected to RabbitMQ and queue is ready");
+    console.log("Connected to RabbitMQ and channel created successfully");
     return channel;
   } catch (error) {
     console.error("Error connecting to RabbitMQ:", error);
@@ -37,47 +37,47 @@ async function sendDataToSummaryQueue(data) {
   }
 }
 
-async function sendDataToWebSearchQueue(data) {
-  try {
-    // console.log(Buffer.from(JSON.stringify(data)));
-    await channel.sendToQueue(
-      "websearchQueue",
-      Buffer.from(JSON.stringify(data))
-    );
-    console.log("Data sent to web search worker");
-  } catch (error) {
-    console.error("Error sending data to websearchQueue:", error);
-    throw new Error("Failed to send data to websearchQueue");
-  }
-}
+// async function sendDataToWebSearchQueue(data) {
+//   try {
+//     // console.log(Buffer.from(JSON.stringify(data)));
+//     await channel.sendToQueue(
+//       "websearchQueue",
+//       Buffer.from(JSON.stringify(data))
+//     );
+//     console.log("Data sent to web search worker");
+//   } catch (error) {
+//     console.error("Error sending data to websearchQueue:", error);
+//     throw new Error("Failed to send data to websearchQueue");
+//   }
+// }
 
-async function summaryWorker() {
-  try {
-    console.log("summary worker started");
-    channel.consume("summariseQueue", async (data) => {
-      if (data !== null) {
-        const { id, text, accessToken } = JSON.parse(data.content.toString());
-        // console.log("Received data for summarization:", text);
+// async function summaryWorker() {
+//   try {
+//     console.log("summary worker started");
+//     channel.consume("summariseQueue", async (data) => {
+//       if (data !== null) {
+//         const { id, text, accessToken } = JSON.parse(data.content.toString());
+//         // console.log("Received data for summarization:", text);
 
-        // Process the data here
-        // For example, you can call a function to summarize the data
-        const summary = await extractInsuranceFields(text);
+//         // Process the data here
+//         // For example, you can call a function to summarize the data
+//         const summary = await extractInsuranceFields(text);
 
-        await sendDataToWebSearchQueue({
-          id,
-          summary,
-          accessToken,
-        });
+//         await sendDataToWebSearchQueue({
+//           id,
+//           summary,
+//           accessToken,
+//         });
 
-        // Acknowledge the message
-        channel.ack(data);
-      }
-    });
-  } catch (error) {
-    console.error("Error in summary worker:", error);
-    channel.ack(data);
-  }
-}
+//         // Acknowledge the message
+//         channel.ack(data);
+//       }
+//     });
+//   } catch (error) {
+//     console.error("Error in summary worker:", error);
+//     channel.ack(data);
+//   }
+// }
 
 // async function websearchWorker() {
 //   try {
@@ -120,7 +120,7 @@ async function summaryWorker() {
 module.exports = {
   connectQueue,
   sendDataToSummaryQueue,
-  sendDataToWebSearchQueue,
-  summaryWorker,
+  // sendDataToWebSearchQueue,
+  // summaryWorker,
   // websearchWorker,
 };

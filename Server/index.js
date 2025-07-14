@@ -37,7 +37,7 @@ app.use("/api/v1", auth, extractInsuranceRoutes);
 async function startQueueAndWorkers() {
   try {
     await connectQueue();
-    await summaryWorker();
+    // await summaryWorker();
     // await websearchWorker();
   } catch (error) {
     console.error("Error starting queue and workers:", error);
