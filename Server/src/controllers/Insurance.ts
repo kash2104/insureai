@@ -1,11 +1,21 @@
-const axios = require("axios");
-const FormData = require("form-data");
-const fs = require("fs");
+// const axios = require("axios");
+import axios from "axios";
+import { Request, Response } from "express";
+// const FormData = require("form-data");
+import FormData from "form-data";
+// const fs = require("fs");
+import fs from "fs";
 // const { extractInsuranceFields } = require('../utils/llmproxy');
-const { sendDataToSummaryQueue } = require("../config/queue");
+// const { sendDataToSummaryQueue } = require("../config/queue");
+import { sendDataToSummaryQueue } from "../config/queue";
 // const { webSearch } = require('../utils/websearch');
 
-exports.extractInsurance = async (req, res) => {
+interface AlchemystApiResponse {
+  text: string;
+  [key: string]: any;
+}
+
+export async function extractInsurance(req: Request, res: Response) {
   try {
     // Check if file is present
     const insurance = req.files?.file;
@@ -23,7 +33,7 @@ exports.extractInsurance = async (req, res) => {
     form.append("file", fs.createReadStream(insurance.tempFilePath));
 
     // Send request to Alchemist API
-    const response = await axios.post(
+    const response = await axios.post<AlchemystApiResponse>(
       "https://platform-backend.getalchemystai.com/api/v1/upload",
       form,
       {
@@ -46,11 +56,11 @@ exports.extractInsurance = async (req, res) => {
       success: true,
       data: response.data,
     });
-  } catch (err) {
+  } catch (err: any) {
     console.error(err.response?.data || err.message);
     res.status(500).json({ error: err.message });
   }
-};
+}
 
 // exports.getInsuranceDetails = async(req, res) => {
 //     try{

@@ -1,10 +1,14 @@
 require("dotenv").config({ path: "../../.env" });
-const { HumanMessage } = require("@langchain/core/messages");
-const { connectQueue } = require("../../config/queue");
-const { lcClientWithProxy } = require("../../utils/llmproxy");
+// const { HumanMessage } = require("@langchain/core/messages");
+import { HumanMessage } from "@langchain/core/messages";
+// const { connectQueue } = require("../../config/queue");
+import { connectQueue } from "../../config/queue";
+// const { lcClientWithProxy } = require("../../utils/llmproxy");
+import { lcClientWithProxy } from "../../utils/llmproxy";
+import { Channel } from "amqplib";
 
 // console.log(process.env.ALCHEMYST_API_KEY);
-async function extractInsuranceFields(rawText) {
+async function extractInsuranceFields(rawText: string): Promise<string> {
   try {
     const prompt = `
   You are an expert in reading and analyzing health insurance policies.
@@ -36,14 +40,17 @@ async function extractInsuranceFields(rawText) {
 
     const response = await lcClientWithProxy.invoke([new HumanMessage(prompt)]);
     // console.log(response);
-    return response.content.trim();
+    return response.content?.toString().trim();
   } catch (error) {
     console.error("Error in extractInsuranceFields:", error);
     throw new Error("Failed to extract insurance fields");
   }
 }
 
-async function sendDataToWebSearchQueue(data, channel) {
+async function sendDataToWebSearchQueue(
+  data: { id: string; summary: string; accessToken: string },
+  channel: Channel
+) {
   try {
     // console.log(Buffer.from(JSON.stringify(data)));
     channel.sendToQueue("websearchQueue", Buffer.from(JSON.stringify(data)));

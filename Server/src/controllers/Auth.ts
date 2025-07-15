@@ -1,8 +1,8 @@
+import { Request, Response } from "express";
+import jwt from "jsonwebtoken";
 require("dotenv").config();
 
-const jwt = require("jsonwebtoken");
-
-exports.login = async (req, res) => {
+export async function login(req: Request, res: Response) {
   try {
     // console.log(req.headers);
     const accessToken = req.headers["authorization"]?.replace("Bearer ", "");
@@ -22,7 +22,7 @@ exports.login = async (req, res) => {
       email: email,
     };
 
-    const token = jwt.sign(payload, process.env.JWT_SECRET, {
+    const token = jwt.sign(payload, process.env.JWT_SECRET!, {
       expiresIn: "12h", // Token expiration time
     });
 
@@ -37,7 +37,7 @@ exports.login = async (req, res) => {
       success: true,
       message: "Login successful",
     });
-  } catch (error) {
+  } catch (error: any) {
     console.error("Login error:", error);
     return res.status(500).json({
       success: false,
@@ -45,4 +45,4 @@ exports.login = async (req, res) => {
       error: error.message,
     });
   }
-};
+}

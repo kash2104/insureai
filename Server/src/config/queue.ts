@@ -1,10 +1,11 @@
-const amqplib = require("amqplib");
+// const amqplib = require("amqplib");
+import amqplib, { Channel } from "amqplib";
 // const { extractInsuranceFields } = require("../utils/llmproxy");
 // const { webSearch } = require("../utils/websearch");
 // const { publisher, CHANNEL } = require("./pubsub");
 
-let connection, channel;
-async function connectQueue() {
+let connection, channel: Channel;
+export async function connectQueue(): Promise<Channel> {
   try {
     const rabbitmqurl = process.env.RABBITMQ_URL || "amqp://localhost";
     connection = await amqplib.connect(rabbitmqurl);
@@ -23,7 +24,11 @@ async function connectQueue() {
   }
 }
 
-async function sendDataToSummaryQueue(data) {
+export async function sendDataToSummaryQueue(data: {
+  id: string;
+  text: string;
+  accessToken: string;
+}) {
   try {
     // console.log(Buffer.from(JSON.stringify(data)));
     await channel.sendToQueue(
@@ -117,10 +122,10 @@ async function sendDataToSummaryQueue(data) {
 //   }
 // }
 
-module.exports = {
-  connectQueue,
-  sendDataToSummaryQueue,
-  // sendDataToWebSearchQueue,
-  // summaryWorker,
-  // websearchWorker,
-};
+// module.exports = {
+// connectQueue,
+// sendDataToSummaryQueue,
+// sendDataToWebSearchQueue,
+// summaryWorker,
+// websearchWorker,
+// };

@@ -1,9 +1,11 @@
 // require("dotenv").config();
 // const { HumanMessage } = require("@langchain/core/messages");
 
-const { ChatOpenAI } = require("@langchain/openai");
+// const { ChatOpenAI } = require("@langchain/openai");
+require("dotenv").config();
+import { ChatOpenAI } from "@langchain/openai";
 
-const lcClientWithProxy = new ChatOpenAI({
+export const lcClientWithProxy = new ChatOpenAI({
   apiKey: process.env.ALCHEMYST_API_KEY,
   model: "alchemyst-ai/alchemyst-c1",
   configuration: {
@@ -57,4 +59,4 @@ const lcClientWithProxy = new ChatOpenAI({
 
 // module.exports = {extractInsuranceFields}
 
-module.exports = { lcClientWithProxy };
+// module.exports = { lcClientWithProxy };

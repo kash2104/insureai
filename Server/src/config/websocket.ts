@@ -1,15 +1,22 @@
-const { WebSocket } = require("ws");
-const { subscriber, CHANNEL } = require("./pubsub");
+// const { WebSocket } = require("ws");
+import WebSocket, { WebSocketServer } from "ws";
+// const { subscriber, CHANNEL } = require("./pubsub");
+import { subscriber, CHANNEL } from "./pubsub";
 
-const taskSubscriptions = new Map();
+interface MessageData {
+  action?: string;
+  task_id: string;
+  result?: string;
+}
+const taskSubscriptions: Map<string, Set<WebSocket>> = new Map();
 
-function setupWebSocket(wss) {
+export function setupWebSocket(wss: WebSocketServer) {
   wss.on("connection", function connection(ws) {
     ws.on("error", console.error);
 
-    ws.on("message", function message(msg) {
+    ws.on("message", function message(msg: string) {
       try {
-        const data = JSON.parse(msg);
+        const data: MessageData = JSON.parse(msg);
         // console.log('Received message:', data);
 
         // Here you can handle the received message
@@ -19,7 +26,7 @@ function setupWebSocket(wss) {
           if (!taskSubscriptions.has(taskId)) {
             taskSubscriptions.set(taskId, new Set());
           }
-          taskSubscriptions.get(taskId).add(ws);
+          taskSubscriptions.get(taskId)?.add(ws);
           console.log(`Client connected!!`);
         }
       } catch (error) {
@@ -39,23 +46,22 @@ function setupWebSocket(wss) {
 
   subscriber.subscribe(CHANNEL, (message) => {
     try {
-      const data = JSON.parse(message);
-      const { task_id, result } = data;
+      const data: MessageData = JSON.parse(message);
 
-      const clients = taskSubscriptions.get(task_id);
+      const clients = taskSubscriptions.get(data.task_id);
       if (clients) {
         for (const client of clients) {
           if (client.readyState === WebSocket.OPEN) {
             client.send(
               JSON.stringify({
-                task_id: task_id,
-                result: result,
+                task_id: data.task_id,
+                result: data.result,
               })
             );
             // console.log(`Sent result for task ID ${task_id} to client`);
           }
         }
-        taskSubscriptions.delete(task_id); // Clear subscription after sending result
+        taskSubscriptions.delete(data.task_id); // Clear subscription after sending result
       }
     } catch (error) {
       console.error("Error processing message from Redis:", error);
@@ -63,4 +69,4 @@ function setupWebSocket(wss) {
   });
 }
 
-module.exports = { setupWebSocket };
+// module.exports = { setupWebSocket };

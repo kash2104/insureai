@@ -1,12 +1,17 @@
 const { default: axios } = require("axios");
-const { connectQueue } = require("../../config/queue");
-const { createClient } = require("redis");
+// const { connectQueue } = require("../../config/queue");
+import { connectQueue } from "../../config/queue";
+import { createClient } from "redis";
+// const { createClient } = require("redis");
 
 const redisurl = process.env.REDIS_URL || "redis://localhost:6379";
 const publisher = createClient({ url: redisurl });
 const CHANNEL = "similar_insurance";
 
-async function webSearch(summary, accessToken) {
+async function webSearch(
+  summary: string,
+  accessToken: string
+): Promise<string> {
   try {
     const prompt =
       "Given the following summary of a health insurance policy, suggest three similar health insurance plans available for Indian citizens. The alternatives should offer comparable or better benefits and aim for lower or more affordable premiums. Describe each plan in 3-4 well-written sentences, including the provider name, product name, sum insured, important inclusions, co-pay or deductible info if applicable, and any standout features. Do not use bullet points, tables, or headings. Write in a clean and informative paragraph format that can be directly displayed on a user interface.";

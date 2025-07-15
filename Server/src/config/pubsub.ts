@@ -1,11 +1,11 @@
-const { createClient } = require("redis");
+import { createClient } from "redis";
 
 const redisurl = process.env.REDIS_URL || "redis://localhost:6379";
 // const publisher = createClient({url: redisurl});
-const subscriber = createClient({ url: redisurl });
-const CHANNEL = "similar_insurance";
+export const subscriber = createClient({ url: redisurl });
+export const CHANNEL = "similar_insurance";
 
-async function startPubSub() {
+export async function startPubSub() {
   try {
     // await publisher.connect();
     await subscriber.connect();
@@ -16,4 +16,4 @@ async function startPubSub() {
   }
 }
 
-module.exports = { subscriber, CHANNEL, startPubSub };
+// module.exports = { subscriber, CHANNEL, startPubSub };
