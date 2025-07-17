@@ -1,13 +1,9 @@
 require("dotenv").config({ path: "../../.env" });
-// const { HumanMessage } = require("@langchain/core/messages");
 import { HumanMessage } from "@langchain/core/messages";
-// const { connectQueue } = require("../../config/queue");
 import { connectQueue } from "../../config/queue";
-// const { lcClientWithProxy } = require("../../utils/llmproxy");
 import { lcClientWithProxy } from "../../utils/llmproxy";
 import { Channel } from "amqplib";
 
-// console.log(process.env.ALCHEMYST_API_KEY);
 async function extractInsuranceFields(rawText: string): Promise<string> {
   try {
     const prompt = `

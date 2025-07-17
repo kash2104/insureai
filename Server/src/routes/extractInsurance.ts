@@ -1,14 +1,7 @@
-// const express = require("express");
 import express from "express";
 const router = express.Router();
 
-// const {
-//   extractInsurance,
-//   //   getInsuranceDetails,
-//   //   findSimilarInsurance,
-// } = require("../controllers/Insurance");
 import { extractInsurance } from "../controllers/Insurance";
-// const { auth } = require("../middlewares/auth");
 import { auth } from "../middlewares/auth";
 
 router.post("/extract", auth, extractInsurance);

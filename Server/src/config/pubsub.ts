@@ -16,4 +16,3 @@ export async function startPubSub() {
   }
 }
 
-// module.exports = { subscriber, CHANNEL, startPubSub };

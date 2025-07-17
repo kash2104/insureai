@@ -1,29 +1,15 @@
-// const express = require("express");
 import express, { Request, Response } from "express";
-// const authRoutes = require("../routes/auth");
 import authRoutes from "./routes/auth";
-// const extractInsuranceRoutes = require("../routes/extractInsurance");
 import extractInsuranceRoutes from "./routes/extractInsurance";
 import { auth } from "./middlewares/auth";
 
 const app = express();
-// const cookieParser = require("cookie-parser");
 import cookieParser from "cookie-parser";
-// const fileUpload = require("express-fileupload");
 import fileUpload from "express-fileupload";
-// const cors = require("cors");
 import cors from "cors";
-// const {
-// connectQueue,
-// summaryWorker,
-//   websearchWorker,
-// } = require("./config/queue");
 import { connectQueue } from "./config/queue";
-// const { WebSocketServer } = require("ws");
 import { WebSocketServer } from "ws";
-// const { startPubSub } = require("./config/pubsub");
 import { startPubSub } from "./config/pubsub";
-// const { setupWebSocket } = require("./config/websocket");
 import { setupWebSocket } from "./config/websocket";
 
 app.use(express.json());

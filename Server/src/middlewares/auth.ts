@@ -1,7 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 require("dotenv").config();
 
-// const jwt = require('jsonwebtoken');
 //@ts-ignore
 import jwt from "jsonwebtoken";
 

@@ -1,8 +1,4 @@
-// const amqplib = require("amqplib");
 import amqplib, { Channel } from "amqplib";
-// const { extractInsuranceFields } = require("../utils/llmproxy");
-// const { webSearch } = require("../utils/websearch");
-// const { publisher, CHANNEL } = require("./pubsub");
 
 let connection, channel: Channel;
 export async function connectQueue(): Promise<Channel> {

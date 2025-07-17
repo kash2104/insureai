@@ -1,8 +1,6 @@
 const { default: axios } = require("axios");
-// const { connectQueue } = require("../../config/queue");
 import { connectQueue } from "../../config/queue";
 import { createClient } from "redis";
-// const { createClient } = require("redis");
 
 const redisurl = process.env.REDIS_URL || "redis://localhost:6379";
 const publisher = createClient({ url: redisurl });

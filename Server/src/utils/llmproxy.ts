@@ -1,7 +1,4 @@
-// require("dotenv").config();
-// const { HumanMessage } = require("@langchain/core/messages");
 
-// const { ChatOpenAI } = require("@langchain/openai");
 require("dotenv").config();
 import { ChatOpenAI } from "@langchain/openai";
 

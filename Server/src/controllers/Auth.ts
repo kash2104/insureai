@@ -4,9 +4,7 @@ require("dotenv").config();
 
 export async function login(req: Request, res: Response) {
   try {
-    // console.log(req.headers);
     const accessToken = req.headers["authorization"]?.replace("Bearer ", "");
-    // console.log(accessToken);
     const { id, email } = req.body;
 
     if (!accessToken) {

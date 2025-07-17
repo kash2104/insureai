@@ -1,6 +1,4 @@
-// const { WebSocket } = require("ws");
 import WebSocket, { WebSocketServer } from "ws";
-// const { subscriber, CHANNEL } = require("./pubsub");
 import { subscriber, CHANNEL } from "./pubsub";
 
 interface MessageData {
