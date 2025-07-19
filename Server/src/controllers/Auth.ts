@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import { CookieOptions, Request, Response } from "express";
 import jwt from "jsonwebtoken";
 require("dotenv").config();
 
@@ -24,9 +24,11 @@ export async function login(req: Request, res: Response) {
       expiresIn: "12h", // Token expiration time
     });
 
-    const cookieOptions = {
+    const cookieOptions: CookieOptions = {
       expires: new Date(Date.now() + 12 * 60 * 60 * 1000), // 12 hours
       httpOnly: true, // Prevents client-side JavaScript from accessing the cookie
+      secure: true,
+      sameSite: "none",
     };
 
     res.cookie("token", token, cookieOptions);
