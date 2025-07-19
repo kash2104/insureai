@@ -16,7 +16,7 @@ const SocketContextProvider = ({ children }) => {
   useEffect(() => {
     async function openSocket() {
       if (!socket && taskId) {
-        const ws = new WebSocket(`ws://localhost:4000`);
+        const ws = new WebSocket(`wss://medicobackend.kavish.tech`);
 
         ws.onopen = () => {
           setSocket(ws);
