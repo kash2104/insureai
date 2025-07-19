@@ -1,0 +1,60 @@
+services:
+  redis:
+    image: redis:8.0-rc1
+    container_name: redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      retries: 5
+      start_period: 15s
+      timeout: 5s
+
+  rabbitmq:
+    image: rabbitmq:4-management
+    container_name: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    healthcheck:
+      test: ["CMD", "rabbitmqctl", "status"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s
+
+  backend:
+    image: kavish004/medicoai-backend:v1
+    container_name: medicoai-backend
+    ports:
+      - "4000:4000"
+    depends_on:
+      redis:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - .env
+
+  summary-worker:
+    image: kavish004/medicoai-backend:v1
+    container_name: medicoai-summary-worker
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    env_file:
+      - .env
+    command: ["dist/workers/summary/index.js"]
+
+  websearch-worker:
+    image: kavish004/medicoai-backend:v1
+    container_name: medicoai-websearch-worker
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    env_file:
+      - .env
+    command: ["dist/workers/websearch/index.js"]
