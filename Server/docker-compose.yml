@@ -25,7 +25,7 @@ services:
       timeout: 5s
 
   backend:
-    image: kavish004/medicoai-backend:v1
+    image: kavish004/medicoai-backend:v3
     container_name: medicoai-backend
     ports:
       - "4000:4000"
@@ -38,7 +38,7 @@ services:
       - .env
 
   summary-worker:
-    image: kavish004/medicoai-backend:v1
+    image: kavish004/medicoai-backend:v3
     container_name: medicoai-summary-worker
     depends_on:
       rabbitmq:
@@ -48,7 +48,7 @@ services:
     command: ["dist/workers/summary/index.js"]
 
   websearch-worker:
-    image: kavish004/medicoai-backend:v1
+    image: kavish004/medicoai-backend:v3
     container_name: medicoai-websearch-worker
     depends_on:
       rabbitmq:
