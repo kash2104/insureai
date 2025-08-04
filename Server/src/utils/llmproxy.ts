@@ -1,13 +1,14 @@
-
 require("dotenv").config();
+import { ChatGoogleGenerativeAI } from "@langchain/google-genai";
 import { ChatOpenAI } from "@langchain/openai";
 
-export const lcClientWithProxy = new ChatOpenAI({
-  apiKey: process.env.ALCHEMYST_API_KEY,
-  model: "alchemyst-ai/alchemyst-c1",
-  configuration: {
-    baseURL: "https://platform-backend.getalchemystai.com/api/v1/proxy/default",
-  },
+export const lcClientWithProxy = new ChatGoogleGenerativeAI({
+  apiKey: process.env.GOOGLE_API_KEY,
+  // model: "alchemyst-ai/alchemyst-c1",
+  model: "gemini-2.0-flash-lite",
+  // configuration: {
+  //   baseURL: "https://platform-backend.getalchemystai.com/api/v1/proxy/default",
+  // },
 });
 
 // async function extractInsuranceFields(rawText) {
